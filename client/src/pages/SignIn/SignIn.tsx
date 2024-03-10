@@ -45,7 +45,7 @@ const SignIn = () => {
         </Link>
       </div>
       <p className="text-red-700 mt-5 text-2xl text-center font-semibold">
-        {error && "Something went wrong!"}
+        {error && "Wrong credentials"}
       </p>
     </div>
   );

@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import HandleSubmit from "./HandleSubmit";
 import { useHandleChange } from "./HandleChange";
@@ -9,9 +9,10 @@ const SignUp = () => {
   const { formData, handleChange } = useHandleChange();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: { preventDefault: () => void }) => {
-    await HandleSubmit(e, formData, setLoading, setError);
+    await HandleSubmit(e, formData, setLoading, setError, navigate);
   };
 
   return (

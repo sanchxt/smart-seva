@@ -11,7 +11,8 @@ export const HandleSubmit = async (
   e: { preventDefault: () => void },
   formData: FormData,
   setLoading: (loading: boolean) => void,
-  setError: (error: boolean) => void
+  setError: (error: boolean) => void,
+  navigate: (to: string) => void
 ) => {
   e.preventDefault();
 
@@ -21,6 +22,8 @@ export const HandleSubmit = async (
     const response = await axios.post("/api/auth/sign-up", formData);
     console.log(response.data);
     setLoading(false);
+
+    navigate("/sign-in");
   } catch (error: any) {
     setLoading(false);
     setError(true);
