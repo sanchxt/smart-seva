@@ -4,6 +4,7 @@ import HandleSubmit from "./HandleSubmit";
 import { useHandleChange } from "./HandleChange";
 import { inputFields } from "./inputFields";
 import { useState } from "react";
+import OAuth from "../../components/OAuth";
 
 const SignUp = () => {
   const { formData, handleChange } = useHandleChange();
@@ -36,6 +37,7 @@ const SignUp = () => {
         >
           {loading ? "Loading..." : "Sign Up"}
         </button>
+        <OAuth />
       </form>
 
       <div className="flex gap-2 mt-3">
