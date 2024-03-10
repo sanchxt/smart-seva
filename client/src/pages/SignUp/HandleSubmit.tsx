@@ -9,14 +9,23 @@ export interface FormData {
 
 export const HandleSubmit = async (
   e: { preventDefault: () => void },
-  formData: FormData
+  formData: FormData,
+  setLoading: (loading: boolean) => void,
+  setError: (error: boolean) => void
 ) => {
   e.preventDefault();
 
   try {
+    setLoading(true);
+    setError(false);
     const response = await axios.post("/api/auth/sign-up", formData);
     console.log(response.data);
+    setLoading(false);
   } catch (error: any) {
+    setLoading(false);
+    setError(true);
     console.error(error.message);
   }
 };
+
+export default HandleSubmit;
