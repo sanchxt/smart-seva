@@ -21,7 +21,7 @@ const SignIn = () => {
     try {
       dispatch(signInStart());
       const response = await axios.post("/api/auth/sign-in", formData);
-      dispatch(signInSuccess(response));
+      dispatch(signInSuccess(response.data));
       navigate("/");
     } catch (error: any) {
       dispatch(signInFailure(error));
