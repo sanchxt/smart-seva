@@ -7,9 +7,10 @@ import {
   signInStart,
   signInSuccess,
 } from "../../redux/user/userSlice";
+import LoginImage from "./LoginImage";
+import OAuth from "../../components/OAuth";
 import { inputFields } from "./inputFields";
 import { useHandleChange } from "./HandleChange";
-import OAuth from "../../components/OAuth";
 
 const SignIn = () => {
   const navigate = useNavigate();
@@ -30,101 +31,61 @@ const SignIn = () => {
   };
 
   return (
-    <div className="p-3 max-w-lg mx-auto">
-      <h1 className="text-3xl text-center font-semibold my-7">Sign In</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        {inputFields.map(
-          (field: { placeholder: string; type: string; id: string }) => (
-            <input
-              key={field.id}
-              {...field}
-              className="bg-slate-100 p-3 rounded-lg"
-              onChange={handleChange}
-            />
-          )
-        )}
-        <button
-          type="submit"
-          disabled={loading}
-          className="bg-slate-700 opacity-[96%] text-white p-3 rounded-lg uppercase hover:bg-slate-800 hover:opacity-100 disabled:opacity-70 disabled:bg-slate-700"
-        >
-          {loading ? "Loading..." : "Sign In"}
-        </button>
-        <OAuth />
-      </form>
-      <div className="flex gap-2 mt-5">
-        <p>Don&apos;t have an account?</p>
-        <Link to="/sign-up">
-          <span className="text-blue-500">Sign Up</span>
-        </Link>
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="relative flex flex-col m-6 space-y-8 bg-white shadow-2xl rounded-2xl md:flex-row md:space-y-0">
+        <div className="flex flex-col justify-center p-8 md:p-14">
+          <span className="mb-3 text-4xl font-bold">Welcome</span>
+          <span className="font-light text-gray-400 mb-8">
+            Please enter your details below to login
+          </span>
+
+          <form onSubmit={handleSubmit}>
+            {inputFields.map(
+              (field: { placeholder: string; type: string; id: string }) => (
+                <div className="py-4" key={field.id}>
+                  <input
+                    {...field}
+                    onChange={handleChange}
+                    className="w-full p-2 border border-gray-300 rounded-md placeholder:font-light placeholder:text-gray-500"
+                  />
+                </div>
+              )
+            )}
+
+            <div className="flex justify-between w-full py-4">
+              <div className="mr-24">
+                <input type="checkbox" name="ch" id="ch" className="mr-2" />
+                <span className="text-md">Remember for 30 days</span>
+              </div>
+              <span className="font-bold text-md">Forgot password?</span>
+            </div>
+            <button
+              type="submit"
+              disabled={loading}
+              className="w-full bg-black text-white p-2 rounded-lg mb-6 hover:bg-white hover:text-black hover:border hover:border-gray-300"
+            >
+              {loading ? "Loading..." : "Sign In"}
+            </button>
+            <OAuth />
+          </form>
+
+          <div className="text-gray-400 flex gap-2">
+            <p className="text-center">Don&apos;t have an account?</p>
+            <Link to="/sign-up">
+              <span className="font-bold text-black">Sign Up</span>
+            </Link>
+          </div>
+          <p className="text-red-700 mt-5 text-center font-semibold">
+            {error
+              ? "Error: " + error.response.data.message || "An error occurred"
+              : ""}
+          </p>
+        </div>
+
+        <LoginImage />
       </div>
-      <p className="text-red-700 mt-5 text-center font-semibold">
-        {error
-          ? "Error: " + error.response.data.message || "An error occurred"
-          : ""}
-      </p>
     </div>
   );
 };
 
 export default SignIn;
-
-// const SignIn = () => {
-//   const { formData, handleChange } = useHandleChange();
-//   // const [loading, setLoading] = useState(false);
-//   // const [error, setError] = useState(false);
-//   const { loading, error } = useSelector((state: any) => state.user);
-//   const navigate = useNavigate();
-
-//   const handleSubmit = async (e: { preventDefault: () => void }) => {
-//     const dispatch = useDispatch();
-//     console.log(
-//       "Initial state:",
-//       useSelector((state: any) => state.user)
-//     );
-//     try {
-//       await HandleSubmit(e, formData, navigate, dispatch);
-//       console.log(
-//         "State after signInStart:",
-//         useSelector((state: any) => state.user)
-//       );
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   };
-
-//   return (
-//     <div className="p-3 max-w-lg mx-auto">
-//       <h1 className="text-3xl text-center font-semibold my-7">Sign In</h1>
-
-//       <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-//         {inputFields.map((field) => (
-//           <input
-//             key={field.id}
-//             {...field}
-//             className="bg-slate-100 p-3 rounded-lg"
-//             onChange={handleChange}
-//           />
-//         ))}
-
-//         <button
-//           type="submit"
-//           className="bg-slate-700 opacity-[96%] text-white p-3 rounded-lg uppercase hover:bg-slate-800 hover:opacity-100 disabled:opacity-70 disabled:bg-slate-700"
-//           disabled={loading}
-//         >
-//           {loading ? "Loading..." : "Sign In"}
-//         </button>
-//       </form>
-
-//       <div className="flex gap-2 mt-3">
-//         <p>Don&apos;t have an account?</p>
-//         <Link to="/sign-up">
-//           <span className="text-blue-500">Sign Up</span>
-//         </Link>
-//       </div>
-//       <p className="text-red-700 mt-5 text-2xl text-center font-semibold">
-//         {error && "Wrong credentials"}
-//       </p>
-//     </div>
-//   );
-// };
