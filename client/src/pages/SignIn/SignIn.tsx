@@ -57,7 +57,9 @@ const SignIn = () => {
                 <input type="checkbox" name="ch" id="ch" className="mr-2" />
                 <span className="text-md">Remember for 30 days</span>
               </div>
-              <span className="font-bold text-md">Forgot password?</span>
+              <span className="font-semibold text-md text-blue-600">
+                Forgot password?
+              </span>
             </div>
             <button
               type="submit"
@@ -72,7 +74,7 @@ const SignIn = () => {
           <div className="text-gray-400 flex gap-2">
             <p className="text-center">Don&apos;t have an account?</p>
             <Link to="/sign-up">
-              <span className="font-bold text-black">Sign Up</span>
+              <span className="font-semibold text-blue-500">Sign Up</span>
             </Link>
           </div>
           <p className="text-red-700 mt-5 text-center font-semibold">
