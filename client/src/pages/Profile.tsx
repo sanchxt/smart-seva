@@ -63,6 +63,17 @@ const Profile = () => {
           className="h-24 w-24 self-center cursor-pointer rounded-full object-cover mt-2"
           onClick={() => fileRef.current?.click()}
         />
+        <p className="text-sm self-center">
+          {imageError ? (
+            <span className="text-red-700">Couldn&apos; upload the image</span>
+          ) : imagePercent > 0 && imagePercent < 100 ? (
+            <span className="text-slate-700">{`Uploading: ${imagePercent}%`}</span>
+          ) : imagePercent === 100 ? (
+            <span className="text-green-600">Image uploaded successfully</span>
+          ) : (
+            ""
+          )}
+        </p>
 
         <input
           type="text"
