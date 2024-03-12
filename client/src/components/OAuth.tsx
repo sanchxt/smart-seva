@@ -32,9 +32,10 @@ const OAuth = () => {
     <button
       type="button"
       onClick={handleGoogleClick}
-      className="bg-red-700 text-white rounded-lg p-3 uppercase opacity-[90%] hover:opacity-100"
+      className="w-full border border-gray-300 text-md p-2 rounded-lg mb-6 hover:bg-black hover:text-white"
     >
-      Continue with Google
+      <img src="/google.svg" alt="Google Img" className="w-6 h-6 inline mr-2" />
+      Sign in with Google
     </button>
   );
 };
