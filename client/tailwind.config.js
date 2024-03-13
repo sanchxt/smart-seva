@@ -7,6 +7,8 @@ export default {
         "theme-yellow": "#ffc727",
         "theme-yellow-dark": "#e6b323",
         "theme-dark": "#37474f",
+        "dark-purple": "#081A51",
+        "light-white": "rgba(255, 255, 255, 0.17)",
       },
       height: {
         "screen-75": "90vh",
