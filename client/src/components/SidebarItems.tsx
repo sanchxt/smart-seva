@@ -64,7 +64,14 @@ const SidebarItems = ({ activeClass }: { activeClass: string }) => {
             />
           </Link>
 
-          <SidebarItem icon={<UserRoundSearch size={20} />} text="Contacts" />
+          <Link to="/contacts">
+            <SidebarItem
+              icon={<UserRoundSearch size={20} />}
+              text="Contacts"
+              active={activeClass === "contacts"}
+            />
+          </Link>
+
           <SidebarItem icon={<Calendar size={20} />} text="Calendar" />
 
           <SidebarItem
