@@ -1,8 +1,10 @@
+import SidebarItems from "../components/SidebarItems";
+
 const About = () => {
   return (
-    <div className="px-4 py-12 max-w-2xl mx-auto">
+    <div className="flex flex-row">
+      <SidebarItems activeClass="about" />
       <h1 className="text-3xl font-bold mb-4 text-slate-800">About</h1>
-      <p className="mb-4 text-slate-700">Lorem ipsum about page section</p>
     </div>
   );
 };
