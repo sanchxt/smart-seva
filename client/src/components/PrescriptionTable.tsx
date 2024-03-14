@@ -2,7 +2,6 @@ import { useSelector } from "react-redux";
 import MUIDataTable from "mui-datatables";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useState, useEffect } from "react";
-import axios from "axios";
 
 const PrescriptionTable = () => {
   const { currentUser } = useSelector((state: any) => state.user);
