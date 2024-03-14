@@ -30,7 +30,7 @@ export default function Sidebar({ children }: any) {
           </div>
 
           <SidebarContext.Provider value={{ expanded }}>
-            <ul className="flex-1 px-3">{children}</ul>
+            <ul className="flex-1 p-3">{children}</ul>
           </SidebarContext.Provider>
 
           <div className="border-t flex p-3">
