@@ -2,6 +2,10 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
+    fontFamily: {
+      display: ["Montserrat", "sans-serif"],
+      body: ["Montserrat", "sans-serif"],
+    },
     extend: {
       colors: {
         "theme-yellow": "#ffc727",
@@ -15,7 +19,7 @@ export default {
         "screen-50": "50vh",
       },
       fontFamily: {
-        main: ['"Open Sans"'],
+        main: ["Montserrat"],
       },
     },
   },
