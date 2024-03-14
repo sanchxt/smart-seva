@@ -1,16 +1,46 @@
 import { useSelector, useDispatch } from "react-redux";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 
 import { signOut } from "../../redux/user/userSlice";
 import HeartRateChart from "./HeartRateChart";
 import CaloriesChart from "./CaloriesChart";
+import quotes from "./quotes";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state: any) => state.user);
   const [quote, setQuote] = useState("hey");
-  const greeting = "Good morning";
+  const [greeting, setGreeting] = useState("Good day");
+
+  useEffect(() => {
+    const handleTimeUpdate = () => {
+      const now = new Date();
+      const hours = now.getHours();
+
+      if (hours >= 4 && hours < 12) {
+        setGreeting("Good morning");
+      } else if (hours >= 12 && hours < 18) {
+        setGreeting("Good afternoon");
+      } else if (hours >= 18 && hours < 21) {
+        setGreeting("Good evening");
+      } else {
+        setGreeting("Good day");
+      }
+    };
+
+    const selectRandomQuote = () => {
+      const randomIndex = Math.floor(Math.random() * quotes.length);
+      setQuote(quotes[randomIndex]);
+    };
+
+    handleTimeUpdate();
+    selectRandomQuote();
+    setInterval(() => {
+      handleTimeUpdate();
+      selectRandomQuote();
+    }, 60 * 60 * 1000);
+  }, []);
 
   const handleSignOut = async () => {
     try {
@@ -27,7 +57,10 @@ const Dashboard = () => {
         <div className="flex flex-col space-y-6 md:space-y-0 md:flex-row justify-between">
           <div className="mr-6">
             <h1 className="text-4xl font-semibold mb-2">
-              {greeting}, {currentUser.username}!
+              {greeting},{" "}
+              <span className="capitalize tracking-widest">
+                {currentUser.username}!
+              </span>
             </h1>
             <h2 className="text-gray-600 ml-0.5">{quote}</h2>
           </div>
@@ -42,7 +75,7 @@ const Dashboard = () => {
         </div>
 
         <section className="grid md:grid-cols-2 xl:grid-cols-4 gap-6">
-          <div className="flex items-center p-8 bg-white shadow rounded-lg">
+          <div className="flex items-center p-8 bg-white shadow-xl rounded-lg">
             <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-purple-600 bg-purple-100 rounded-full mr-6">
               <img src="/heart-rate.svg" alt="heart rate" />
             </div>
@@ -51,7 +84,7 @@ const Dashboard = () => {
               <span className="block text-gray-500 capitalize">heart rate</span>
             </div>
           </div>
-          <div className="flex items-center p-8 bg-white shadow rounded-lg">
+          <div className="flex items-center p-8 bg-white shadow-xl rounded-lg">
             <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 rounded-full mr-6">
               <img src="/blood-drop.png" alt="blood pressure" />
             </div>
@@ -62,7 +95,7 @@ const Dashboard = () => {
               </span>
             </div>
           </div>
-          <div className="flex items-center p-8 bg-white shadow rounded-lg">
+          <div className="flex items-center p-8 bg-white shadow-xl rounded-lg">
             <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-red-600 bg-red-100 rounded-full mr-6">
               <img src="/oxygen-level.svg" alt="oxygen level" />
             </div>
@@ -73,7 +106,7 @@ const Dashboard = () => {
               </span>
             </div>
           </div>
-          <div className="flex items-center p-8 bg-white shadow rounded-lg">
+          <div className="flex items-center p-8 bg-white shadow-xl rounded-lg">
             <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 mr-6">
               <img src="/thermometer.png" alt="thermometer temperature" />
             </div>
@@ -89,7 +122,7 @@ const Dashboard = () => {
         </section>
 
         <section className="grid md:grid-cols-2 xl:grid-cols-4 xl:grid-rows-3 xl:grid-flow-col gap-6">
-          <div className="flex flex-col md:col-span-2 md:row-span-2 bg-white shadow rounded-lg">
+          <div className="flex flex-col md:col-span-2 md:row-span-2 bg-white shadow-2xl rounded-lg">
             <div className="px-6 py-5 font-semibold border-b border-gray-100">
               Recent Heart Rates
             </div>
@@ -98,7 +131,7 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="flex items-center p-8 bg-white shadow rounded-lg">
+          <div className="flex items-center p-8 bg-white shadow-xl rounded-lg">
             <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 mr-6">
               <img src="/steps.svg" alt="steps walked" />
             </div>
@@ -108,7 +141,7 @@ const Dashboard = () => {
             </div>
           </div>
 
-          <div className="flex items-center p-8 bg-white shadow rounded-lg">
+          <div className="flex items-center p-8 bg-white shadow-xl rounded-lg">
             <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 text-teal-600 bg-teal-100 rounded-full mr-6">
               <img src="/calorie.png" alt="stress" />
             </div>
@@ -119,30 +152,9 @@ const Dashboard = () => {
               </span>
             </div>
           </div>
-          <div className="row-span-3 bg-white shadow rounded-lg">
+          <div className="row-span-3 bg-white shadow-2xl rounded-lg">
             <div className="flex items-center justify-between px-6 py-5 font-semibold border-b border-gray-100">
               <span>Contacts</span>
-              <button
-                type="button"
-                className="inline-flex justify-center rounded-md px-1 -mr-1 bg-white text-sm leading-5 font-medium text-gray-500 hover:text-gray-600"
-                id="options-menu"
-                aria-haspopup="true"
-                aria-expanded="true"
-              >
-                USERS
-                <svg
-                  className="-mr-1 ml-1 h-5 w-5"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </button>
             </div>
             <div className="overflow-y-auto" style={{ maxHeight: "24rem" }}>
               <ul className="p-6 space-y-6">
@@ -229,7 +241,7 @@ const Dashboard = () => {
               </ul>
             </div>
           </div>
-          <div className="flex flex-col row-span-3 bg-white shadow rounded-lg">
+          <div className="flex flex-col row-span-3 bg-white shadow-2xl rounded-lg">
             <div className="px-6 py-5 font-semibold border-b border-gray-100">
               <p className="capitalize">calories burned</p>
             </div>
