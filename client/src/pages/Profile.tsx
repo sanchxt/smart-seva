@@ -18,7 +18,7 @@ import {
   deleteUserFailure,
   signOut,
 } from "../redux/user/userSlice";
-import { update } from "firebase/database";
+import SidebarItems from "../components/SidebarItems";
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -112,79 +112,86 @@ const Profile = () => {
   };
 
   return (
-    <div className="p-3 max-w-lg mx-auto">
-      <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4">
-        <input
-          type="file"
-          ref={fileRef}
-          hidden
-          accept="image/*"
-          onChange={(e) => setImage(e.target.files?.[0])}
-        />
-        <img
-          src={formData.profilePicture || currentUser.profilePicture}
-          alt="profile"
-          className="h-24 w-24 self-center cursor-pointer rounded-full object-cover mt-2"
-          onClick={() => fileRef.current?.click()}
-        />
-        <p className="text-sm self-center">
-          {imageError ? (
-            <span className="text-red-700">Couldn&apos; upload the image</span>
-          ) : imagePercent > 0 && imagePercent < 100 ? (
-            <span className="text-slate-700">{`Uploading: ${imagePercent}%`}</span>
-          ) : imagePercent === 100 ? (
-            <span className="text-green-600">Image uploaded successfully</span>
-          ) : (
-            ""
-          )}
-        </p>
+    <div className="flex flex-row">
+      <SidebarItems activeClass="profile" />
+      <div className="p-3 max-w-lg mx-auto flex-1">
+        <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-4">
+          <input
+            type="file"
+            ref={fileRef}
+            hidden
+            accept="image/*"
+            onChange={(e) => setImage(e.target.files?.[0])}
+          />
+          <img
+            src={formData.profilePicture || currentUser.profilePicture}
+            alt="profile"
+            className="h-24 w-24 self-center cursor-pointer rounded-full object-cover mt-2"
+            onClick={() => fileRef.current?.click()}
+          />
+          <p className="text-sm self-center">
+            {imageError ? (
+              <span className="text-red-700">
+                Couldn&apos; upload the image
+              </span>
+            ) : imagePercent > 0 && imagePercent < 100 ? (
+              <span className="text-slate-700">{`Uploading: ${imagePercent}%`}</span>
+            ) : imagePercent === 100 ? (
+              <span className="text-green-600">
+                Image uploaded successfully
+              </span>
+            ) : (
+              ""
+            )}
+          </p>
 
-        <input
-          type="text"
-          defaultValue={currentUser.username}
-          id="username"
-          placeholder="Username"
-          className="bg-slate-100 rounded-lg p-3"
-          onChange={handleChange}
-        />
-        <input
-          type="email"
-          defaultValue={currentUser.email}
-          id="email"
-          placeholder="E-mail"
-          className="bg-slate-100 rounded-lg p-3"
-          onChange={handleChange}
-        />
-        <input
-          type="password"
-          id="password"
-          placeholder="Password"
-          className="bg-slate-100 rounded-lg p-3"
-          onChange={handleChange}
-        />
-        <button className="bg-slate-700 opacity-95 text-white p-3 rounded-lg uppercase hover:bg-slate-800 hover:opacity-100 disabled:opacity-80">
-          {loading ? "Loading..." : "Update"}
-        </button>
-      </form>
-      <div className="flex justify-between mt-5">
-        <span
-          onClick={handleDeleteAccount}
-          className="text-red-700 cursor-pointer font-semibold hover:font-bold"
-        >
-          Delete Account
-        </span>
-        <span
-          onClick={handleSignOut}
-          className="text-red-700 cursor-pointer font-semibold hover:font-bold"
-        >
-          Sign Out
-        </span>
+          <input
+            type="text"
+            defaultValue={currentUser.username}
+            id="username"
+            placeholder="Username"
+            className="bg-slate-100 rounded-lg p-3"
+            onChange={handleChange}
+          />
+          <input
+            type="email"
+            defaultValue={currentUser.email}
+            id="email"
+            placeholder="E-mail"
+            className="bg-slate-100 rounded-lg p-3"
+            onChange={handleChange}
+          />
+          <input
+            type="password"
+            id="password"
+            placeholder="Password"
+            className="bg-slate-100 rounded-lg p-3"
+            onChange={handleChange}
+          />
+          <button className="bg-slate-700 opacity-95 text-white p-3 rounded-lg uppercase hover:bg-slate-800 hover:opacity-100 disabled:opacity-80">
+            {loading ? "Loading..." : "Update"}
+          </button>
+        </form>
+        <div className="flex justify-between mt-5">
+          <span
+            onClick={handleDeleteAccount}
+            className="text-red-700 cursor-pointer font-semibold hover:font-bold"
+          >
+            Delete Account
+          </span>
+          <span
+            onClick={handleSignOut}
+            className="text-red-700 cursor-pointer font-semibold hover:font-bold"
+          >
+            Sign Out
+          </span>
+        </div>
+        <p className="text-red-700 mt-5">{error && "Something went wrong!"}</p>
+        <p className="text-green-500 mt-5">
+          {updateSuccess && "User has been updated successfully!"}
+        </p>
       </div>
-      <p className="text-red-700 mt-5">{error && "Something went wrong!"}</p>
-      <p className="text-green-500 mt-5">
-        {updateSuccess && "User has been updated successfully!"}
-      </p>
     </div>
   );
 };
