@@ -1,18 +1,32 @@
 import { useSelector } from "react-redux";
 import MUIDataTable from "mui-datatables";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
-
-const columns = ["Medicine", "Frequency", "Time", "How"];
+import { useState, useEffect } from "react";
+import axios from "axios";
 
 const PrescriptionTable = () => {
   const { currentUser } = useSelector((state: any) => state.user);
+  const [data, setData] = useState([]);
 
-  const data = [
-    ["Adderall", "2 / day", "10 A.M., 8 P.M.", "After Food"],
-    ["Amoxicillin", "1 / day", "8 A.M.", "Before Food"],
-    ["Methadone", "1 / day", "8 P.M.", "After Food"],
-    ["Cephalexin", "1 / day", "5 P.M.", "After Food"],
-  ];
+  const columns = ["Medicine", "Frequency", "Time", "How"];
+
+  useEffect(() => {
+    if (currentUser) {
+      const formattedData = currentUser.medicine.map(
+        (medicine: any, index: any) => [
+          medicine,
+          `${currentUser.frequency[index]} / day` || "(N.A.)",
+          `${currentUser.time[index]} ${
+            currentUser.AM[index] === true ? "A.M" : "P.M."
+          }` || "(N.A.)",
+          currentUser.how[index] || "(N.A.)",
+        ]
+      );
+      setData(formattedData);
+    } else {
+      setData([]);
+    }
+  }, [currentUser]);
 
   const options = {
     // filterType: "checkbox",
@@ -65,7 +79,11 @@ const PrescriptionTable = () => {
           </div>
         </div>
       ) : (
-        ""
+        <div className="flex justify-center items-center mx-auto">
+          <h1 className="text-2xl lg:text-4xl font-light tracking-widest border-2 shadow-lg rounded-lg lg:rounded-2xl p-5 lg:p-10">
+            Nothing to see here
+          </h1>
+        </div>
       )}
     </>
   );
