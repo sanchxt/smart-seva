@@ -40,6 +40,28 @@ export const updateUser = async (req, res, next) => {
   }
 };
 
+export const upload = async (req, res, next) => {
+  if (req.user.id !== req.params.id) {
+    return next(errorHandler(401, "you can only update your account!"));
+  }
+
+  try {
+    const updatedPrescription = await User.findByIdAndUpdate(
+      req.params.id,
+      {
+        $set: {
+          currentPrescription: req.body.currentPrescription,
+        },
+      },
+      { new: true }
+    );
+
+    res.status(200).json(updatedPrescription);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const deleteUser = async (req, res, next) => {
   if (req.user.id !== req.params.id) {
     return next(errorHandler(401, "you can only delete your account!"));
