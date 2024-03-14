@@ -1,10 +1,11 @@
 import SidebarItems from "../../components/SidebarItems";
+import Dashboard from "./Dashboard";
 
 const HomePage = () => {
   return (
     <div className="flex flex-row">
       <SidebarItems activeClass="dashboard" />
-      <h1>hi</h1>
+      <Dashboard />
     </div>
   );
 };
