@@ -8,6 +8,7 @@ import {
   SignIn,
   About,
   UploadPrescription,
+  Prescription,
 } from "./pages";
 
 const App = () => {
@@ -23,6 +24,9 @@ const App = () => {
         </Route>
         <Route element={<PrivateRoute />}>
           <Route path="/upload" element={<UploadPrescription />} />
+        </Route>
+        <Route element={<PrivateRoute />}>
+          <Route path="/prescription" element={<Prescription />} />
         </Route>
       </Routes>
     </BrowserRouter>
