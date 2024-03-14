@@ -2,6 +2,7 @@ import express from "express";
 
 import {
   deleteUser,
+  getPrescription,
   test,
   updateUser,
   upload,
@@ -13,6 +14,7 @@ const router = express.Router();
 router.get("/", test);
 router.post("/update/:id", verifyToken, updateUser);
 router.post("/upload/:id", verifyToken, upload);
+router.get("/prescription/:id", verifyToken, getPrescription);
 router.delete("/delete/:id", verifyToken, deleteUser);
 
 export default router;
