@@ -10,6 +10,7 @@ import {
   Upload,
   HeartHandshake,
   BookA,
+  Pill,
 } from "lucide-react";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -77,6 +78,14 @@ const SidebarItems = ({ activeClass }: { activeClass: string }) => {
               icon={<Upload size={20} />}
               text="Upload Prescription"
               active={activeClass === "upload"}
+            />
+          </Link>
+
+          <Link to="/prescription">
+            <SidebarItem
+              icon={<Pill size={20} />}
+              text="Current Prescription"
+              active={activeClass === "prescription"}
             />
           </Link>
           <hr className="my-3" />
