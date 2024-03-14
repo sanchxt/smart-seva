@@ -62,6 +62,24 @@ export const upload = async (req, res, next) => {
   }
 };
 
+export const getPrescription = async (req, res, next) => {
+  if (req.user.id !== req.params.id) {
+    return next(errorHandler(401, "you can only update your account!"));
+  }
+
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) {
+      return next(errorHandler(404, "User not found"));
+    }
+
+    const { medicine, frequency, time, how } = user;
+    res.status(200).json({ medicine, frequency, time, how });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const deleteUser = async (req, res, next) => {
   if (req.user.id !== req.params.id) {
     return next(errorHandler(401, "you can only delete your account!"));
