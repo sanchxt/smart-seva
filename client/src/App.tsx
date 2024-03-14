@@ -9,24 +9,23 @@ import {
   About,
   UploadPrescription,
   Prescription,
+  Contacts,
 } from "./pages";
 
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/sign-in" element={<SignIn />} />
         <Route path="/sign-up" element={<SignUp />} />
+
         <Route element={<PrivateRoute />}>
+          <Route path="/" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
-        </Route>
-        <Route element={<PrivateRoute />}>
           <Route path="/upload" element={<UploadPrescription />} />
-        </Route>
-        <Route element={<PrivateRoute />}>
           <Route path="/prescription" element={<Prescription />} />
+          <Route path="/contacts" element={<Contacts />} />
         </Route>
       </Routes>
     </BrowserRouter>
