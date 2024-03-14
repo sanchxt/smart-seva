@@ -47,7 +47,7 @@ const CaloriesChart = () => {
         </BarChart>
       </ResponsiveContainer>
       <p className="text-center text-[0.8rem] mt-2 italic">
-        Calories burned on day {activeItem.name}:
+        Calories burned on {activeItem.name}:
         <span className="font-semibold"> {activeItem.uv}</span>
       </p>
     </>
