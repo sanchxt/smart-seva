@@ -29,6 +29,27 @@ const userSchema = new mongoose.Schema(
       type: String,
       default: "",
     },
+    medicine: {
+      type: [String],
+      default: ["Test"],
+    },
+    frequency: {
+      type: [Number],
+      default: [2],
+    },
+    time: {
+      type: [Number],
+      default: [10],
+    },
+    AM: {
+      type: [Boolean],
+      default: [true],
+    },
+    how: {
+      type: [String],
+      default: ["After"],
+      enum: ["After", "Before"],
+    },
   },
   { timestamps: true }
 );
