@@ -1,7 +1,14 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 
 import PrivateRoute from "./components/PrivateRoute";
-import { Home, Profile, SignUp, SignIn, About } from "./pages";
+import {
+  Home,
+  Profile,
+  SignUp,
+  SignIn,
+  About,
+  UploadPrescription,
+} from "./pages";
 
 const App = () => {
   return (
@@ -13,6 +20,9 @@ const App = () => {
         <Route path="/sign-up" element={<SignUp />} />
         <Route element={<PrivateRoute />}>
           <Route path="/profile" element={<Profile />} />
+        </Route>
+        <Route element={<PrivateRoute />}>
+          <Route path="/upload" element={<UploadPrescription />} />
         </Route>
       </Routes>
     </BrowserRouter>
