@@ -12,9 +12,9 @@ import { verifyToken } from "../utils/verifyUser.js";
 const router = express.Router();
 
 router.get("/", test);
-router.post("/update/:id", verifyToken, updateUser);
-router.post("/upload/:id", verifyToken, upload);
 router.get("/prescription/:id", verifyToken, getPrescription);
+router.post("/upload/:id", verifyToken, upload);
+router.post("/update/:id", verifyToken, updateUser);
 router.delete("/delete/:id", verifyToken, deleteUser);
 
 export default router;

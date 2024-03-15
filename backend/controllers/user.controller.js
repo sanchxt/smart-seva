@@ -64,19 +64,18 @@ export const upload = async (req, res, next) => {
 
 export const getPrescription = async (req, res, next) => {
   try {
-    console.log('hi')
     const user = await User.findById(req.params.id);
     if (!user) {
       return next(errorHandler(404, "User not found"));
     }
 
     const { medicine, frequency, time, how, AM } = user;
-    console.log(user);
     res.status(200).json({ medicine, frequency, time, how, AM });
   } catch (error) {
     next(error);
   }
 };
+
 
 export const deleteUser = async (req, res, next) => {
   if (req.user.id !== req.params.id) {

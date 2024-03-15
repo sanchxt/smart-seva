@@ -34,8 +34,9 @@ const userSchema = new mongoose.Schema(
       default: ["Test"],
     },
     frequency: {
-      type: [Number],
-      default: [2],
+      type: [String],
+      default: [],
+      enum: ["Twice a day", "Once a day", "Thrice a day"]
     },
     time: {
       type: [Number],
@@ -50,6 +51,10 @@ const userSchema = new mongoose.Schema(
       default: ["After"],
       enum: ["After", "Before"],
     },
+    returnValue: {
+      type: String,
+      default: "",
+    }
   },
   { timestamps: true }
 );

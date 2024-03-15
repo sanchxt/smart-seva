@@ -11,13 +11,17 @@ import {
   HeartHandshake,
   BookA,
   Pill,
+  Megaphone
 } from "lucide-react";
 import "react-toastify/dist/ReactToastify.css";
+import { useEffect, useState } from "react";
+import axios from "axios";
 
 import Sidebar, { SidebarItem } from "./Sidebar";
 
 const SidebarItems = ({ activeClass }: { activeClass: string }) => {
   const { currentUser } = useSelector((state: any) => state.user);
+  const [medicine, setMedicine] = useState("");
 
   const copyToClipboard = async (text: string) => {
     try {
@@ -38,6 +42,22 @@ const SidebarItems = ({ activeClass }: { activeClass: string }) => {
       copyToClipboard(currentUser._id);
     } else {
       console.log("Not available");
+    }
+  };
+
+  const handleClickAlertKey = async () => {
+    if (currentUser) {
+      try {
+        const response = await axios.get(`/api/user/prescription/${currentUser._id}`);
+        const data = response.data;
+        const { medicine } = data;
+        toast.success(`You should take ${medicine[0]} now.`, {
+          position: "top-center",
+          className: "w-34"
+        });
+      } catch (error) {
+        console.error(error);
+      }
     }
   };
 
@@ -78,6 +98,12 @@ const SidebarItems = ({ activeClass }: { activeClass: string }) => {
             icon={<Key size={20} />}
             text="Unique Key"
             clickable={handleClickUniqueKey}
+          />
+
+          <SidebarItem
+            icon={<Megaphone size={20} />}
+            text="Alert Medicine"
+            clickable={handleClickAlertKey}
           />
 
           <Link to="/upload">

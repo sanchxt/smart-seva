@@ -37,25 +37,8 @@ const Dashboard = () => {
       setQuote(quotes[randomIndex]);
     };
 
-    const fetchStats = async () => {
-      try {
-        const response = await axios.get('https://v1.nocodeapi.com/wriath/fit/WrAfDcDMAPpXDHco/aggregatesDatasets?dataTypeName=steps_count,calories_expended&timePeriod=7days');
-        const data = response.data;
-        const { steps_count, calories_expended } = data;
-        console.log(steps_count);
-        console.log(calories_expended);
-        setSteps(steps_count);
-        setCalories(calories_expended);
-        console.log(steps);
-        console.log(calories);
-      } catch (error: any) {
-        console.error("error fetching user stats:", error);
-      }
-    };
-
     handleTimeUpdate();
     selectRandomQuote();
-    fetchStats();
     setInterval(() => {
       handleTimeUpdate();
       selectRandomQuote();
@@ -100,7 +83,7 @@ const Dashboard = () => {
               <img src="/heart-rate.svg" alt="heart rate" />
             </div>
             <div>
-              <span className="block text-2xl font-bold">89 BPM</span>
+              <span className="block text-2xl font-bold">88 BPM</span>
               <span className="block text-gray-500 capitalize">heart rate</span>
             </div>
           </div>
@@ -120,9 +103,9 @@ const Dashboard = () => {
               <img src="/oxygen-level.svg" alt="oxygen level" />
             </div>
             <div>
-              <span className="block text-2xl font-bold">95%</span>
+              <span className="block text-2xl font-bold">100%</span>
               <span className="block text-gray-500 capitalize">
-                oxygen level
+                oxygen level {`(2:30 PM)`}
               </span>
             </div>
           </div>
@@ -144,7 +127,7 @@ const Dashboard = () => {
         <section className="grid md:grid-cols-2 xl:grid-cols-4 xl:grid-rows-3 xl:grid-flow-col gap-6">
           <div className="flex flex-col md:col-span-2 md:row-span-2 bg-white shadow-2xl rounded-lg">
             <div className="px-6 py-5 font-semibold border-b border-gray-100">
-              Recent Heart Rates
+              Recent Steps Count
             </div>
             <div className="p-4 flex-grow">
               <HeartRateChart />
@@ -166,9 +149,9 @@ const Dashboard = () => {
               <img src="/calorie.png" alt="stress" />
             </div>
             <div>
-              <span className="block text-2xl font-bold">280</span>
+              <span className="block text-2xl font-bold">8972</span>
               <span className="block text-gray-500 capitalize">
-                calories burned today
+                Calories burned this week
               </span>
             </div>
           </div>
