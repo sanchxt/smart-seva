@@ -6,7 +6,6 @@ import axios from "axios";
 
 const PrescriptionTable = () => {
   const { currentUser } = useSelector((state: any) => state.user);
-  const [success, setSuccess] = useState("");
   const [data, setData] = useState([]);
 
   const columns = ["Medicine", "Frequency"];
@@ -23,7 +22,7 @@ const PrescriptionTable = () => {
 
           const formattedData = medicine.map(
             (medicine: string, index: number) => [
-              medicine,
+              medicine || fallbackString,
               frequency[index] || fallbackString,
             ]
           );
