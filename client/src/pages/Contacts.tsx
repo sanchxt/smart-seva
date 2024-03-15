@@ -10,16 +10,19 @@ const Contacts = () => {
   const [formData, setFormData] = useState({ targetId: "", targetEmail: "" });
   const { currentUser, loading } = useSelector((state: any) => state.user);
 
-  const handleChange = (e: { target: { id: any; value: any; }; }) => {
+  const handleChange = (e: { target: { id: any; value: any } }) => {
     setFormData({ ...formData, [e.target.id]: e.target.value });
   };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
-  
-    try {
-      await axios.post(`/api/user/add-contacts/${currentUser._id}`, formData);
 
+    try {
+      const response = await axios.post(
+        `/api/user/add-contacts/${currentUser._id}`,
+        formData
+      );
+      console.log(response.data);
       setFormData({ targetId: "", targetEmail: "" });
       toast.success("Contact has been successfully added");
     } catch (error) {

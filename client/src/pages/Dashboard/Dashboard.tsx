@@ -151,6 +151,7 @@ const Dashboard = () => {
   const { currentUser } = useSelector((state: any) => state.user);
   const [quote, setQuote] = useState("hey");
   const [greeting, setGreeting] = useState("Good day");
+  const [allContacts, setAllContacts] = useState([]);
 
   useEffect(() => {
     const handleTimeUpdate = () => {
@@ -173,8 +174,20 @@ const Dashboard = () => {
       setQuote(quotes[randomIndex]);
     };
 
+    const fetchContacts = async () => {
+      try {
+        const response = await axios.get(
+          `/api/user/get-contacts/${currentUser._id}`
+        );
+        setAllContacts(response.data.contacts);
+      } catch (error) {
+        console.error("error fetching contacts:", error);
+      }
+    };
+
     handleTimeUpdate();
     selectRandomQuote();
+    fetchContacts();
     setInterval(() => {
       handleTimeUpdate();
       selectRandomQuote();
@@ -190,12 +203,19 @@ const Dashboard = () => {
     }
   };
 
+  const handleTestClick = () => {
+    console.log(allContacts);
+  };
+
   return (
     <div className="flex-grow text-gray-800">
       <main className="p-6 sm:p-10 space-y-6">
         <div className="flex flex-col space-y-6 md:space-y-0 md:flex-row justify-between">
           <div className="mr-6">
-            <h1 className="text-4xl font-semibold mb-2">
+            <h1
+              className="text-4xl font-semibold mb-2"
+              onClick={handleTestClick}
+            >
               {greeting},{" "}
               <span className="capitalize tracking-widest">
                 {currentUser.username}!
@@ -301,7 +321,27 @@ const Dashboard = () => {
             </div>
             <div className="overflow-y-auto" style={{ maxHeight: "24rem" }}>
               <ul className="p-6 space-y-6">
-                <li className="flex items-center">
+                {allContacts.length < 1 ? (
+                  <div className="text-center text-2xl italic">
+                    No contacts available
+                  </div>
+                ) : (
+                  <>
+                    {allContacts.map((contact: String) => (
+                      <li className="flex items-center">
+                        <div className="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
+                          <img
+                            src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
+                            alt="Default Picture"
+                          />
+                        </div>
+                        <span className="ml-auto font-light">{contact}</span>
+                      </li>
+                    ))}
+                  </>
+                )}
+
+                {/* <li className="flex items-center">
                   <div className="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
                     <img
                       src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
@@ -380,7 +420,7 @@ const Dashboard = () => {
                   </div>
                   <span className="text-gray-600">Australia</span>
                   <span className="ml-auto font-semibold">7.7</span>
-                </li>
+                </li> */}
               </ul>
             </div>
           </div>
