@@ -1,20 +1,156 @@
-import { useSelector, useDispatch } from "react-redux";
-import { useState, useEffect } from "react";
 import axios from "axios";
+import { useState, useEffect, useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import {
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  Cell,
+} from "recharts";
 
-import { signOut } from "../../redux/user/userSlice";
-import HeartRateChart from "./HeartRateChart";
-import CaloriesChart from "./CaloriesChart";
 import quotes from "./quotes";
+// import CaloriesChart from "./CaloriesChart";
+import { signOut } from "../../redux/user/userSlice";
+
+let totalSteps = 0;
+let totalCalories = 0;
+
+const HeartRateChart = () => {
+  const [steps, setSteps] = useState([{}]);
+
+  useEffect(() => {
+    const fetchSteps = async () => {
+      try {
+        const response = await axios.get(
+          "https://v1.nocodeapi.com/wriath/fit/WrAfDcDMAPpXDHco/aggregatesDatasets?dataTypeName=steps_count,calories_expended&timePeriod=7days"
+        );
+        const data = response.data;
+        const { steps_count } = data;
+        setSteps(steps_count);
+      } catch (error: any) {
+        console.error("error fetching user stats:", error);
+      }
+    };
+
+    fetchSteps();
+  }, []);
+
+  const data = steps.map((step: any) => {
+    totalSteps += step["value"];
+    return { name: "", uv: step["value"] };
+  });
+
+  return (
+    <ResponsiveContainer width="100%" height={200}>
+      <AreaChart
+        width={200}
+        height={200}
+        data={data}
+        margin={{
+          top: 10,
+          right: 30,
+          left: 0,
+          bottom: 0,
+        }}
+      >
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="name" />
+        <YAxis />
+        <Tooltip />
+        <Area type="monotone" dataKey="uv" stroke="#8884d8" fill="#8884d8" />
+      </AreaChart>
+    </ResponsiveContainer>
+  );
+};
+
+let caloriesBurned: any = [];
+const CaloriesChart = () => {
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [calories, setCalories] = useState([]);
+
+  const handleClick = useCallback(
+    (entry: any, index: number) => {
+      setActiveIndex(index);
+    },
+    [setActiveIndex]
+  );
+
+  useEffect(() => {
+    const fetchCalories = async () => {
+      try {
+        const response = await axios.get(
+          "https://v1.nocodeapi.com/wriath/fit/WrAfDcDMAPpXDHco/aggregatesDatasets?dataTypeName=steps_count,calories_expended&timePeriod=7days"
+        );
+        const data = response.data;
+        const { calories_expended } = data;
+        setCalories(calories_expended);
+      } catch (error: any) {
+        console.error("error fetching user stats:", error);
+      }
+    };
+
+    fetchCalories();
+  }, []);
+
+  const caloriesToPush = calories.map((calorie: any) =>
+    caloriesBurned.push(calorie.value)
+  );
+  // caloriesToPush();
+  // const caloriesBurned = [249, 341, 183, 142, 197, 104, 207];
+
+  const today = new Date();
+  const getPastDays = (days: number) => {
+    const dates = [];
+    for (let i = 0; i < days; i++) {
+      const newDate = new Date(today.getTime() - i * 24 * 60 * 60 * 1000);
+      const month = newDate.toLocaleString("default", { month: "long" });
+      const day = newDate.getDate();
+      totalCalories += caloriesBurned[i];
+      dates.push({
+        name: `${month} ${day}`,
+        uv: caloriesBurned[i],
+      });
+    }
+    return dates;
+  };
+
+  const data = getPastDays(7);
+  const activeItem = data[activeIndex];
+
+  return (
+    <>
+      <ResponsiveContainer width="100%" height={300}>
+        <BarChart data={data}>
+          <Bar dataKey="uv" onClick={handleClick}>
+            {data.map((entry, index: number) => (
+              <Cell
+                cursor="pointer"
+                fill={index === activeIndex ? "#82ca9d" : "#8884d8"}
+                key={`cell-${index}`}
+              />
+            ))}
+          </Bar>
+        </BarChart>
+      </ResponsiveContainer>
+      <p className="text-center text-[0.8rem] mt-2 italic">
+        Calories burned on {activeItem.name}:
+        <span className="font-semibold"> {activeItem.uv}</span>
+      </p>
+    </>
+  );
+};
 
 const Dashboard = () => {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state: any) => state.user);
   const [quote, setQuote] = useState("hey");
   const [greeting, setGreeting] = useState("Good day");
-  const [steps, setSteps] = useState([{}]);
-  const [calories, setCalories] = useState([]);
-
 
   useEffect(() => {
     const handleTimeUpdate = () => {
@@ -93,9 +229,7 @@ const Dashboard = () => {
             </div>
             <div>
               <span className="block text-2xl font-bold">79.1 KG</span>
-              <span className="block text-gray-500 capitalize">
-                weight
-              </span>
+              <span className="block text-gray-500 capitalize">weight</span>
             </div>
           </div>
           <div className="flex items-center p-8 bg-white shadow-xl rounded-lg">
@@ -139,8 +273,12 @@ const Dashboard = () => {
               <img src="/steps.svg" alt="steps walked" />
             </div>
             <div>
-              <span className="block text-2xl font-bold">7869</span>
-              <span className="block text-gray-500 capitalize">Steps</span>
+              <span className="block text-2xl font-bold">
+                {totalSteps || "N.A."}
+              </span>
+              <span className="block text-gray-500 capitalize">
+                Steps walked this week
+              </span>
             </div>
           </div>
 
@@ -149,7 +287,9 @@ const Dashboard = () => {
               <img src="/calorie.png" alt="stress" />
             </div>
             <div>
-              <span className="block text-2xl font-bold">8972</span>
+              <span className="block text-2xl font-bold">
+                {totalCalories || "N.A."}
+              </span>
               <span className="block text-gray-500 capitalize">
                 Calories burned this week
               </span>
