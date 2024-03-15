@@ -31,12 +31,12 @@ const userSchema = new mongoose.Schema(
     },
     medicine: {
       type: [String],
-      default: ["Test"],
+      default: [],
     },
     frequency: {
       type: [String],
       default: [],
-      enum: ["Twice a day", "Once a day", "Thrice a day"]
+      enum: ["Twice a day", "Once a day", "Thrice a day"],
     },
     time: {
       type: [Number],
@@ -54,7 +54,7 @@ const userSchema = new mongoose.Schema(
     contacts: {
       type: [String],
       default: [],
-    }
+    },
   },
   { timestamps: true }
 );
