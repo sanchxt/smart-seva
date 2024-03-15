@@ -14,14 +14,12 @@ import {
   Megaphone
 } from "lucide-react";
 import "react-toastify/dist/ReactToastify.css";
-import { useEffect, useState } from "react";
 import axios from "axios";
 
 import Sidebar, { SidebarItem } from "./Sidebar";
 
 const SidebarItems = ({ activeClass }: { activeClass: string }) => {
   const { currentUser } = useSelector((state: any) => state.user);
-  const [medicine, setMedicine] = useState("");
 
   const copyToClipboard = async (text: string) => {
     try {
