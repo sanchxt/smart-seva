@@ -62,6 +62,34 @@ export const upload = async (req, res, next) => {
   }
 };
 
+export const addContacts = async (req, res, next) => {
+  const { targetId, targetEmail } = req.body;
+  const currentUserId = req.params.id;
+
+  try {
+    const targetUser = await User.findOne({ _id: targetId, email: targetEmail });
+    if (!targetUser) {
+      return res.status(400).json({ message: "User not found, or email mismatch" });
+    }
+
+    if (currentUserId === targetId) {
+      return res.status(400).json({ message: "You cannot add yourself as a contact" });
+    }
+
+    const currentUser = await User.findById(currentUserId);
+    if (currentUser.contacts.includes(targetId)) {
+      return res.status(400).json({ message: "target user is already in your contacts" })
+    }
+
+    currentUser.contacts.push(targetId);
+    await currentUser.save();
+
+    res.status(200).json({ message: 'Contact added successfully!' });
+  } catch (error) {
+    next(error);
+  }
+}
+
 export const getPrescription = async (req, res, next) => {
   try {
     const user = await User.findById(req.params.id);
