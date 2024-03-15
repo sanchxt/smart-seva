@@ -51,9 +51,9 @@ const userSchema = new mongoose.Schema(
       default: ["After"],
       enum: ["After", "Before"],
     },
-    returnValue: {
-      type: String,
-      default: "",
+    contacts: {
+      type: [String],
+      default: [],
     }
   },
   { timestamps: true }
