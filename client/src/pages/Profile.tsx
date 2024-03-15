@@ -112,7 +112,7 @@ const Profile = () => {
   };
 
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-row h-screen">
       <SidebarItems activeClass="profile" />
       <div className="p-3 max-w-lg mx-auto flex-1">
         <h1 className="text-3xl font-semibold text-center my-7">Profile</h1>

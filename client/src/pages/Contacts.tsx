@@ -7,7 +7,7 @@ import SidebarItems from "../components/SidebarItems";
 
 const Contacts = () => {
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-row h-screen">
       <SidebarItems activeClass="contacts" />
       <p>contacts</p>
     </div>

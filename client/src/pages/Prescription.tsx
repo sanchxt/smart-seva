@@ -3,7 +3,7 @@ import SidebarItems from "../components/SidebarItems";
 
 const Prescription = () => {
   return (
-    <div className="flex flex-row">
+    <div className="flex flex-row h-screen">
       <SidebarItems activeClass="prescription" />
       <PrescriptionTable />
     </div>

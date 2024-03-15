@@ -12,6 +12,9 @@ const Dashboard = () => {
   const { currentUser } = useSelector((state: any) => state.user);
   const [quote, setQuote] = useState("hey");
   const [greeting, setGreeting] = useState("Good day");
+  const [steps, setSteps] = useState([{}]);
+  const [calories, setCalories] = useState([]);
+
 
   useEffect(() => {
     const handleTimeUpdate = () => {
@@ -34,8 +37,25 @@ const Dashboard = () => {
       setQuote(quotes[randomIndex]);
     };
 
+    const fetchStats = async () => {
+      try {
+        const response = await axios.get('https://v1.nocodeapi.com/wriath/fit/WrAfDcDMAPpXDHco/aggregatesDatasets?dataTypeName=steps_count,calories_expended&timePeriod=7days');
+        const data = response.data;
+        const { steps_count, calories_expended } = data;
+        console.log(steps_count);
+        console.log(calories_expended);
+        setSteps(steps_count);
+        setCalories(calories_expended);
+        console.log(steps);
+        console.log(calories);
+      } catch (error: any) {
+        console.error("error fetching user stats:", error);
+      }
+    };
+
     handleTimeUpdate();
     selectRandomQuote();
+    fetchStats();
     setInterval(() => {
       handleTimeUpdate();
       selectRandomQuote();
@@ -86,12 +106,12 @@ const Dashboard = () => {
           </div>
           <div className="flex items-center p-8 bg-white shadow-xl rounded-lg">
             <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 rounded-full mr-6">
-              <img src="/blood-drop.png" alt="blood pressure" />
+              <img src="/weight.png" alt="blood pressure" />
             </div>
             <div>
-              <span className="block text-2xl font-bold">110 SYS, 76 DIA</span>
+              <span className="block text-2xl font-bold">79.1 KG</span>
               <span className="block text-gray-500 capitalize">
-                blood pressure
+                weight
               </span>
             </div>
           </div>

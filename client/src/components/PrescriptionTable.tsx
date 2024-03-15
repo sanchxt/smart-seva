@@ -2,6 +2,7 @@ import { useSelector } from "react-redux";
 import MUIDataTable from "mui-datatables";
 import { ThemeProvider, createTheme } from "@mui/material/styles";
 import { useState, useEffect } from "react";
+import axios from "axios";
 
 const PrescriptionTable = () => {
   const { currentUser } = useSelector((state: any) => state.user);
@@ -9,23 +10,56 @@ const PrescriptionTable = () => {
 
   const columns = ["Medicine", "Frequency", "Time", "How"];
 
+  // useEffect(() => {
+  //   const fetchPrescription = async () => {
+  //     if (currentUser) {
+  //       const formattedData = currentUser.medicine.map(
+  //         (medicine: any, index: any) => [
+  //           medicine,
+  //           `${currentUser.frequency[index]} / day` || "(N.A.)",
+  //           `${currentUser.time[index]} ${
+  //             currentUser.AM[index] === true ? "A.M" : "P.M."
+  //           }` || "(N.A.)",
+  //           currentUser.how[index] || "(N.A.)",
+  //         ]
+  //       );
+  //       const response = await axios.get(`/api/user/prescription/${currentUser.id}`);
+  //       setData(formattedData);
+  //   }
+  //   } else {
+  //     setData([]);
+  //   }
+  // }
   useEffect(() => {
-    if (currentUser) {
-      const formattedData = currentUser.medicine.map(
-        (medicine: any, index: any) => [
-          medicine,
-          `${currentUser.frequency[index]} / day` || "(N.A.)",
-          `${currentUser.time[index]} ${
-            currentUser.AM[index] === true ? "A.M" : "P.M."
-          }` || "(N.A.)",
-          currentUser.how[index] || "(N.A.)",
-        ]
-      );
-      setData(formattedData);
-    } else {
-      setData([]);
-    }
-  }, [currentUser]);
+    const fetchPrescription = async () => {
+      try {
+        if (currentUser) {
+          const response = await axios.get(`/api/user/prescription/${currentUser._id}`);
+          const data = response.data;
+          const { medicine, frequency, time, how, AM } = data;
+          const fallbackString = "(N.A.)";
+          console.log(data);
+
+          const formattedData = medicine.map(
+            (medicine: string, index: number) => [
+              medicine,
+              `${frequency[index]} / day` || fallbackString,
+              `${time[index]} ${AM[index] === true ? "A.M." : "P.M."}` || fallbackString,
+              how[index] || fallbackString,
+            ]
+          );
+
+          setData(formattedData);
+        } else {
+          setData([])
+        }
+      } catch (error) {
+        console.error("error fetching prescription data:", error);
+      }
+    };
+
+    fetchPrescription();
+  }, []);
 
   const options = {
     // filterType: "checkbox",
