@@ -140,8 +140,8 @@ export const getUsername = async (req, res, next) => {
     const user = await User.findById(req.params.id);
     if (!user) return next(errorHandler(404, "user not found!"));
 
-    const { username } = user;
-    res.status(200).json({ username });
+    const { username, profilePicture } = user;
+    res.status(200).json({ username, profilePicture });
   } catch (error) {
     next(error);
   }
