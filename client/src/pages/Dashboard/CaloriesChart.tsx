@@ -18,7 +18,7 @@ const CaloriesChart = () => {
   useEffect(() => {
     const fetchCalories = async () => {
       try {
-        const response = await axios.get('https://v1.nocodeapi.com/wriath/fit/WrAfDcDMAPpXDHco/aggregatesDatasets?dataTypeName=steps_count,calories_expended&timePeriod=7days');
+        const response = await axios.get('https://v1.nocodeapi.com/kinect/fit/nAvdQVuVGOsQYFll/aggregatesDatasets?dataTypeName=steps_count,calories_expended&timePeriod=7days');
         const data = response.data;
         const { calories_expended } = data;
         setCalories(calories_expended);
