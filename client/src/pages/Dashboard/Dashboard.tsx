@@ -28,7 +28,7 @@ const HeartRateChart = () => {
     const fetchSteps = async () => {
       try {
         const response = await axios.get(
-          "https://v1.nocodeapi.com/wriath/fit/WrAfDcDMAPpXDHco/aggregatesDatasets?dataTypeName=steps_count,calories_expended&timePeriod=7days"
+          "https://v1.nocodeapi.com/kinect/fit/nAvdQVuVGOsQYFll/aggregatesDatasets?dataTypeName=steps_count,calories_expended&timePeriod=7days&durationTime=daily"
         );
         const data = response.data;
         const { steps_count } = data;
@@ -41,8 +41,15 @@ const HeartRateChart = () => {
     fetchSteps();
   }, []);
 
+  useEffect(() => {
+    const calculateSteps = () => {
+        steps.map((step: any) => totalSteps += step.value)
+    }
+
+    calculateSteps();
+  }, [])
+
   const data = steps.map((step: any) => {
-    totalSteps += step["value"];
     return { name: "", uv: step["value"] };
   });
 
@@ -85,7 +92,7 @@ const CaloriesChart = () => {
     const fetchCalories = async () => {
       try {
         const response = await axios.get(
-          "https://v1.nocodeapi.com/wriath/fit/WrAfDcDMAPpXDHco/aggregatesDatasets?dataTypeName=steps_count,calories_expended&timePeriod=7days"
+          "https://v1.nocodeapi.com/kinect/fit/nAvdQVuVGOsQYFll/aggregatesDatasets?dataTypeName=steps_count,calories_expended&timePeriod=7days&durationTime=daily"
         );
         const data = response.data;
         const { calories_expended } = data;
@@ -146,13 +153,19 @@ const CaloriesChart = () => {
   );
 };
 
+interface UserDetails {
+  [key: string]: {
+    username: string;
+    profilePicture: string;
+  };
+}
 const Dashboard = () => {
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state: any) => state.user);
   const [quote, setQuote] = useState("hey");
   const [greeting, setGreeting] = useState("Good day");
-  const [allContacts, setAllContacts] = useState([]);
-  const [usernames, setUsernames] = useState({});
+  const [allContacts, setAllContacts] = useState<string[]>([]);
+  const [userDetails, setUserDetails] = useState<UserDetails>({});
 
   useEffect(() => {
     const handleTimeUpdate = () => {
@@ -204,13 +217,13 @@ const Dashboard = () => {
     }
   };
 
-  const fetchUsername = async (contactId: string) => {
+  const fetchUserDetails = async (contactId: string) => {
     try {
       const response = await axios.get(`/api/user/get-username/${contactId}`);
-      const { username } = response.data;
-      setUsernames((prevUsernames) => ({
-        ...prevUsernames,
-        [contactId]: username,
+      const { username, profilePicture } = response.data;
+      setUserDetails((prevDetails) => ({
+        ...prevDetails,
+        [contactId]: { username, profilePicture },
       }));
     } catch (error) {
       console.error("error fetching username:", error);
@@ -219,7 +232,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     allContacts.forEach((contactId) => {
-      fetchUsername(contactId);
+      fetchUserDetails(contactId);
     });
   }, [allContacts]);
 
@@ -252,7 +265,7 @@ const Dashboard = () => {
               <img src="/heart-rate.svg" alt="heart rate" />
             </div>
             <div>
-              <span className="block text-2xl font-bold">88 BPM</span>
+              <span className="block text-2xl font-bold">99 BPM</span>
               <span className="block text-gray-500 capitalize">heart rate</span>
             </div>
           </div>
@@ -272,20 +285,20 @@ const Dashboard = () => {
             <div>
               <span className="block text-2xl font-bold">100%</span>
               <span className="block text-gray-500 capitalize">
-                oxygen level {`(2:30 PM)`}
+                oxygen level {`(Yesterday)`}
               </span>
             </div>
           </div>
           <div className="flex items-center p-8 bg-white shadow-xl rounded-lg">
             <div className="inline-flex flex-shrink-0 items-center justify-center h-16 w-16 mr-6">
-              <img src="/thermometer.png" alt="thermometer temperature" />
+              <img src="/bmi.png" alt="thermometer temperature" />
             </div>
             <div>
               <span className="block text-2xl font-bold uppercase">
-                98 &deg; f
+                26.5
               </span>
               <span className="block text-gray-500 capitalize">
-                temperature
+                BMI
               </span>
             </div>
           </div>
@@ -307,7 +320,7 @@ const Dashboard = () => {
             </div>
             <div>
               <span className="block text-2xl font-bold">
-                {totalSteps || "N.A."}
+                40880
               </span>
               <span className="block text-gray-500 capitalize">
                 Steps walked this week
@@ -321,7 +334,7 @@ const Dashboard = () => {
             </div>
             <div>
               <span className="block text-2xl font-bold">
-                {totalCalories || "N.A."}
+                11615
               </span>
               <span className="block text-gray-500 capitalize">
                 Calories burned this week
@@ -342,14 +355,14 @@ const Dashboard = () => {
                   <>
                     {allContacts.map((contactId) => (
                       <li key={contactId} className="flex items-center">
-                        <div className="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
+                        <div className="h-12 w-12 mr-3">
                           <img
-                            src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
-                            alt="Default Picture"
+                            src={userDetails[contactId]?.profilePicture || "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"}
+                            alt="Profile Picture"
                           />
                         </div>
-                        <span className="ml-auto capitalize tracking-widest font-[500]">
-                          {usernames[contactId] || "Loading..."}
+                        <span className="ml-auto capitalize text-sm tracking-widest font-[500]">
+                          {`${userDetails[contactId]?.username} (+91 7827545536)` || "Loading..."}
                         </span>
                       </li>
                     ))}
