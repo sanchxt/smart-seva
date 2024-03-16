@@ -152,6 +152,7 @@ const Dashboard = () => {
   const [quote, setQuote] = useState("hey");
   const [greeting, setGreeting] = useState("Good day");
   const [allContacts, setAllContacts] = useState([]);
+  const [usernames, setUsernames] = useState({});
 
   useEffect(() => {
     const handleTimeUpdate = () => {
@@ -203,19 +204,31 @@ const Dashboard = () => {
     }
   };
 
-  const handleTestClick = () => {
-    console.log(allContacts);
+  const fetchUsername = async (contactId: string) => {
+    try {
+      const response = await axios.get(`/api/user/get-username/${contactId}`);
+      const { username } = response.data;
+      setUsernames((prevUsernames) => ({
+        ...prevUsernames,
+        [contactId]: username,
+      }));
+    } catch (error) {
+      console.error("error fetching username:", error);
+    }
   };
+
+  useEffect(() => {
+    allContacts.forEach((contactId) => {
+      fetchUsername(contactId);
+    });
+  }, [allContacts]);
 
   return (
     <div className="flex-grow text-gray-800">
       <main className="p-6 sm:p-10 space-y-6">
         <div className="flex flex-col space-y-6 md:space-y-0 md:flex-row justify-between">
           <div className="mr-6">
-            <h1
-              className="text-4xl font-semibold mb-2"
-              onClick={handleTestClick}
-            >
+            <h1 className="text-4xl font-semibold mb-2">
               {greeting},{" "}
               <span className="capitalize tracking-widest">
                 {currentUser.username}!
@@ -327,103 +340,25 @@ const Dashboard = () => {
                   </div>
                 ) : (
                   <>
-                    {allContacts.map((contact: String) => (
-                      <li className="flex items-center">
+                    {allContacts.map((contactId) => (
+                      <li key={contactId} className="flex items-center">
                         <div className="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
                           <img
                             src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
                             alt="Default Picture"
                           />
                         </div>
-                        <span className="ml-auto font-light">{contact}</span>
+                        <span className="ml-auto capitalize tracking-widest font-[500]">
+                          {usernames[contactId] || "Loading..."}
+                        </span>
                       </li>
                     ))}
                   </>
                 )}
-
-                {/* <li className="flex items-center">
-                  <div className="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
-                    <img
-                      src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
-                      alt="Annette Watson profile picture"
-                    />
-                  </div>
-                  <span className="text-gray-600">United States</span>
-                  <span className="ml-auto font-semibold">9.3</span>
-                </li>
-                <li className="flex items-center">
-                  <div className="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
-                    <img
-                      src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
-                      alt="Calvin Steward profile picture"
-                    />
-                  </div>
-                  <span className="text-gray-600">Spain</span>
-                  <span className="ml-auto font-semibold">8.9</span>
-                </li>
-                <li className="flex items-center">
-                  <div className="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
-                    <img
-                      src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
-                      alt="Ralph Richards profile picture"
-                    />
-                  </div>
-                  <span className="text-gray-600">United Kingdom</span>
-                  <span className="ml-auto font-semibold">8.7</span>
-                </li>
-                <li className="flex items-center">
-                  <div className="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
-                    <img
-                      src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
-                      alt="Bernard Murphy profile picture"
-                    />
-                  </div>
-                  <span className="text-gray-600">Malaysia</span>
-                  <span className="ml-auto font-semibold">8.2</span>
-                </li>
-                <li className="flex items-center">
-                  <div className="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
-                    <img
-                      src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
-                      alt="Arlene Robertson profile picture"
-                    />
-                  </div>
-                  <span className="text-gray-600">Russia</span>
-                  <span className="ml-auto font-semibold">8.2</span>
-                </li>
-                <li className="flex items-center">
-                  <div className="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
-                    <img
-                      src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
-                      alt="Jane Lane profile picture"
-                    />
-                  </div>
-                  <span className="text-gray-600">Canada</span>
-                  <span className="ml-auto font-semibold">8.1</span>
-                </li>
-                <li className="flex items-center">
-                  <div className="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
-                    <img
-                      src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
-                      alt="Pat Mckinney profile picture"
-                    />
-                  </div>
-                  <span className="text-gray-600">India</span>
-                  <span className="ml-auto font-semibold">7.9</span>
-                </li>
-                <li className="flex items-center">
-                  <div className="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
-                    <img
-                      src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460__340.png"
-                      alt="Norman Walters profile picture"
-                    />
-                  </div>
-                  <span className="text-gray-600">Australia</span>
-                  <span className="ml-auto font-semibold">7.7</span>
-                </li> */}
               </ul>
             </div>
           </div>
+
           <div className="flex flex-col row-span-3 bg-white shadow-2xl rounded-lg">
             <div className="px-6 py-5 font-semibold border-b border-gray-100">
               <p className="capitalize">calories burned</p>
