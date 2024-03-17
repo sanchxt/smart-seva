@@ -265,7 +265,7 @@ const Dashboard = () => {
               <img src="/heart-rate.svg" alt="heart rate" />
             </div>
             <div>
-              <span className="block text-2xl font-bold">99 BPM</span>
+              <span className="block text-2xl font-bold">83 BPM</span>
               <span className="block text-gray-500 capitalize">heart rate</span>
             </div>
           </div>
